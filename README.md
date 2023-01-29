@@ -1,5 +1,9 @@
 # tema3_pso
 
+##LINK github
+
+[link](https://github.com/marcu26/tema3_pso)
+
 ## Headere
 
 ### comune.h
@@ -24,6 +28,16 @@
 - indexOperations = numarul de operatii care se executa intr-un moment
 - Node = un nod din lista de fisiere si operatii
 
+### Variabile globale
+
+- indexOperations = a cata operatie este cea care urmeaza in lista
+- __thread int client\_socket\_fd si __thread int client_index sunt doua variabile thread local 
+- pthread\_cond\_t cond; variabila conditionala folsit sa trimit un semnal ca threadul de update list sa se "trezeasca"
+- pthread\_mutex\_t mutex; mutex folosit ca un singur thread sa faca update la lista o data
+- pthread\_t thread_handle; tid handler clienti  
+- pthread\_t update_thread; tid thread de update list
+
+
 ### Functii
 
 - Initialize: creare socket, bind cu port si ip
@@ -44,3 +58,4 @@
 
 - am separat lista de fisiere prin '\n', prin '\0' nu se mai intelegea bine in client
 - fisierul log.txt este cel in care se tin loggurile
+- la primirea semnalului SIGTERM serverul va ramane deschis pana va trata si ultimul client (daca nu a dat comanda, se asteapta dupa comanda lui)

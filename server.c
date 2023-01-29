@@ -49,21 +49,21 @@ struct listOfFiles
 int indexOperations;
 
 typedef struct listOfFiles listOfFiles;
-typedef struct params params; // pentru a da threadului parametrii
+typedef struct params params;
 
-listOfFiles list; // lista de fisiere cu top 10 cuvinte
+listOfFiles list; 
 
 __thread int client_socket_fd;
 __thread int client_index;
-// index client si socket client (tls)
 
 int server_socket_fd;
 struct sockaddr_in server_addr;
+int isStillRunning;
 int nrOfClients;
 
-pthread_t update_thread; // threadul cu lista
-pthread_t thread_handle; // threadul de handling clienti
-int isStillRunning;
+pthread_t update_thread; 
+pthread_t thread_handle; 
+
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -87,7 +87,6 @@ static void sig_handler(int signum)
             pthread_cancel(thread_handle);
             pthread_cancel(update_thread);
         }
-
         close(server_socket_fd);
         break;
     }
@@ -232,7 +231,7 @@ void *UpdateList()
 
         char *folder = "./files";
         UpdateListRecursive(folder);
-        sleep(2);
+        sleep(0.5);
         pthread_mutex_unlock(&mutex);
     }
 }
@@ -241,7 +240,7 @@ void FirstUpdate()
 {
     char *folder = "./files";
     UpdateListRecursive(folder);
-    sleep(2);
+    sleep(0.5);
 }
 
 char **GetComanda(char string[2048], int *nrWords)
@@ -601,6 +600,8 @@ int UpdateFile(char *file_name, char *s_start, char *s_dim, char *chars)
 
 #pragma endregion
 
+#pragma region treating client
+
 void Execute(char client_message[2048])
 {
     int size = 0;
@@ -692,7 +693,7 @@ void *HandleClient(void *parameters)
     Execute(client_message);
 
     close(client_socket_fd);
-    
+
     nrOfClients--;
 
     if (nrOfClients == 0 && isStillRunning == 0)
@@ -711,22 +712,34 @@ void *HandleIncomingConnections()
 
         int client_sock = accept(server_socket_fd, (struct sockaddr *)&client_addr, &client_size);
 
-        if (client_sock < 0)
+        if (isStillRunning == 1)
         {
-            printf("Can't accept\n");
-            break;
+
+            if (client_sock < 0)
+            {
+                printf("Can't accept\n");
+                break;
+            }
+            printf("Client connected at IP: %s and port: %i\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+
+            pthread_t tid;
+            struct params p;
+            p.client_socket = client_sock;
+            p.index = nrOfClients;
+            nrOfClients++;
+
+            pthread_create(&tid, NULL, HandleClient, &p);
         }
-        printf("Client connected at IP: %s and port: %i\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
-
-        pthread_t tid;
-        struct params p;
-        p.client_socket = client_sock;
-        p.index = nrOfClients;
-        nrOfClients++;
-
-        pthread_create(&tid, NULL, HandleClient, &p);
+        else
+        {
+            printf("\nNu mai primim conexiuni\n");
+            send(client_sock, "Server oprit", 12, 0);
+        }
     }
 }
+
+
+#pragma endregion
 
 int main(int argc, char const *argv[])
 {
@@ -743,4 +756,6 @@ int main(int argc, char const *argv[])
         pthread_join(update_thread, NULL);
         pthread_join(thread_handle, NULL);
     }
+
+    
 }
