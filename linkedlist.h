@@ -59,12 +59,12 @@ void DeleteNode(struct Node **headRef, int index)
     free(temp);
 }
 
-struct Node *Search(struct Node *head, char *filename, char *operation)
+struct Node *SearchInList(struct Node *head, char *filename, char *operation, int index)
 {
     struct Node *current = head;
     while (current != NULL)
     {
-        if (strcmp(current->filename, filename) == 0 && strcmp(current->operation, operation) == 0)
+        if (strcmp(current->filename, filename) == 0 && strcmp(current->operation, operation) == 0 && current->index!=index && current->index<index)
         {
             return current;
         }

@@ -13,3 +13,14 @@
 01/29/2023, 16:54, server sent file list 
 01/29/2023, 17:12, server sent file list 
 01/29/2023, 17:13, Server searched for word aaa
+01/29/2023, 20:23, Server sent file file
+01/29/2023, 20:25, Server updated file file
+01/29/2023, 20:25, Server sent file file
+01/29/2023, 20:26, Server sent file file
+01/29/2023, 20:28, Server sent file file
+01/29/2023, 20:36, Server updated file file
+01/29/2023, 20:36, Server sent file file
+01/29/2023, 20:36, Server updated file file
+01/29/2023, 20:36, Server sent file file
+01/29/2023, 21:10, server sent file list 
+01/29/2023, 21:11, Server searched for word aaa

@@ -383,6 +383,7 @@ int SendFile(char *filename)
     int myIndex = indexOperations;
     indexOperations++;
 
+
     char file[1024] = "./files/";
     strcat(file, filename);
     int file_fd = open(file, O_RDONLY);
@@ -417,7 +418,7 @@ int SendFile(char *filename)
     recv(client_socket_fd, buff, 10, 0);
     off_t offset;
 
-    while (Search(head, filename, "UPDATE") != NULL)
+    while (SearchInList(head, filename, "UPDATE",myIndex) != NULL)
     {
         // wait
     }
@@ -560,6 +561,8 @@ int UpdateFile(char *file_name, char *s_start, char *s_dim, char *chars)
     int myIndex = indexOperations;
     indexOperations++;
 
+     sleep(3);
+
     send(client_socket_fd, "5", 1, 0);
     char buff[10];
     recv(client_socket_fd, buff, 10, 0);
@@ -582,7 +585,7 @@ int UpdateFile(char *file_name, char *s_start, char *s_dim, char *chars)
         return -2;
     }
 
-    while (Search(head, file_name, "UPDATE") != NULL && Search(head, file_name, "GET") != NULL)
+    while (SearchInList(head, file_name, "UPDATE",myIndex) != NULL && SearchInList(head, file_name, "GET",myIndex) != NULL)
     {
         // wait
     }
@@ -590,6 +593,8 @@ int UpdateFile(char *file_name, char *s_start, char *s_dim, char *chars)
     size_t bytes_written = fwrite(chars, 1, dim, file);
     fclose(file);
     send(client_socket_fd, "Done", 4, 0);
+    DeleteNode(&head,myIndex);
+    indexOperations--;
 
     Log("Server updated file", file_name);
 
@@ -694,6 +699,8 @@ void *HandleClient(void *parameters)
 
     close(client_socket_fd);
 
+  
+
     nrOfClients--;
 
     if (nrOfClients == 0 && isStillRunning == 0)
@@ -701,6 +708,8 @@ void *HandleClient(void *parameters)
         pthread_cancel(thread_handle);
         pthread_cancel(update_thread);
     }
+
+    pthread_cancel(pthread_self());
 }
 
 void *HandleIncomingConnections()
