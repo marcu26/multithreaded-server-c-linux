@@ -61,3 +61,4 @@
 - am separat lista de fisiere prin '\n', prin '\0' nu se mai intelegea bine in client
 - fisierul log.txt este cel in care se tin loggurile
 - la primirea semnalului SIGTERM serverul va ramane deschis pana va trata si ultimul client (daca nu a dat comanda, se asteapta dupa comanda lui)
+- severul are acces la fisierele si folderele din folderul files
