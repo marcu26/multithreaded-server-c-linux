@@ -62,7 +62,7 @@ struct sockaddr_in server_addr;
 int nrOfClients;
 
 pthread_t update_thread; // threadul cu lista
-pthread_t thread_handle; // threadul cu lista
+pthread_t thread_handle; // threadul de handling clienti
 int isStillRunning;
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;

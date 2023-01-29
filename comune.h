@@ -3,4 +3,3 @@
 #define IP 0
 #define MAX_CLIENTS 10
 #define SIGINT 2
-#define MESSAGE_SIZE 32
