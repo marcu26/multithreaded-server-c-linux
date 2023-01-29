@@ -62,4 +62,4 @@
 - fisierul log.txt este cel in care se tin loggurile
 - la primirea semnalului SIGTERM serverul va ramane deschis pana va trata si ultimul client (daca nu a dat comanda, se asteapta dupa comanda lui)
 - severul are acces la fisierele si folderele din folderul files
-- sleep a fost pus in update pentru testare daca threadurile se asteapta pentru a executa operatii
+- sleep a fost pus in update pentru testare daca threadurile se asteapta pentru a executa operatii pe fisiere
